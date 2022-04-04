@@ -17,6 +17,7 @@ class BoothCrawler:
     """
 
     PRODUCT_XPATH = "//li/@data-product-id"
+    PRODUCT_TYPE_XPATH = "//div[@class=\"item-category\"]/text()"
 
     def __init__(self, userInfo: UserInfo) -> None:
         self._userInfo = userInfo
@@ -32,7 +33,7 @@ class BoothCrawler:
         opener.addheaders = [("User-Agent", ua.random)]
         req.install_opener(opener)
 
-    def _getWebsiteInfo(self) -> list[str]:
+    def _getWebsiteInfo(self) -> tuple[list[str], list[str]]:
         """
             Reaches the target website to get the goods list.
         
@@ -49,9 +50,9 @@ class BoothCrawler:
             .read() \
             .decode("utf-8")
         reqHtml = etree.HTML(reqStr)
-        return reqHtml.xpath(self.PRODUCT_XPATH)
+        return reqHtml.xpath(self.PRODUCT_XPATH), reqHtml.xpath(self.PRODUCT_TYPE_XPATH)
     
-    def _updateGoods(self) -> list[str]:
+    def _updateGoods(self) -> list[tuple[str, str]]:
         """
             Updates the old goods' list with the new one.
         
@@ -62,11 +63,11 @@ class BoothCrawler:
         `list[str]`: Goods that differs new list from the old one
         """
         oldGoods = self._userInfo.goods
-        newGoods = self._getWebsiteInfo()
-        diffGoods = []
-        for newGood in newGoods:
+        newGoods, goodTypes = self._getWebsiteInfo()
+        diffGoods: list[tuple[str, str]] = []
+        for newGood, goodType in zip(newGoods, goodTypes):
             if newGood not in oldGoods:
-                diffGoods.append(newGood)
+                diffGoods.append((newGood, goodType))
         self._userInfo.goods = newGoods
         return diffGoods
     
@@ -76,7 +77,7 @@ class BoothCrawler:
         """
         self._userInfo.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    def updateUserInfo(self) -> dict[str, list[str]] :
+    def updateUserInfo(self) -> dict[str, list[tuple[str, str]]] :
         """
             Updates the user info with the new one.
 

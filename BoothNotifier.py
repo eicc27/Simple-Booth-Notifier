@@ -13,8 +13,12 @@ class BoothNotifier:
         """
         for userName, goods in launchInfo.items():
             coloredUserName = StrFormat.cstr(userName, style="UNDERLINE", fcolor="CYAN")
-            coloredGoods = StrFormat.cstr(",".join(goods), style="DEFAULT", fcolor="RED")
             if goods:
-                print(f"{coloredUserName}'s new goods: {coloredGoods}.")
+                print(f"{coloredUserName}'s new goods:")
+                for good in goods:
+                    goodsName, goodsType = good
+                    coloredGoodsName = StrFormat.cstr(goodsName, style="BOLD", fcolor="MAGENTA")
+                    coloredGoodsType = StrFormat.cstr(goodsType, style="DEFAULT", fcolor="GREEN")
+                    print(f"{coloredGoodsName} ==> {coloredGoodsType}")
             else:
                 StrFormat.warning(f"Nothing to update for {userName}.")
