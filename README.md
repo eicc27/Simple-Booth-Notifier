@@ -14,21 +14,21 @@ For all those who could understand the title and brief of this project, they sho
 
 首先，通过某种手段确认你想寻找的画师，他确实在booth上卖东西。比如，抱枕相关资源站`omiai-dakimakura.com`中会有你想寻找的booth的链接。
 
-![](/home/chan/Documents/Code/Python/Simple-Booth-Notifier/md_assets/Screenshot_20220404_230003.png)
+![](./md_assets/Screenshot_20220404_230003.png)
 
 点进去后是商品页，如果商品还在（可能有r18确认），那就有画师的信息（如果没有，booth会自己跳到那个画师的主页上，结果上看一样）。
 
-![](/home/chan/Documents/Code/Python/Simple-Booth-Notifier/md_assets/Screenshot_20220404_230159.png)
+![](./md_assets/Screenshot_20220404_230159.png)
 
 点到画师的头像或者名字就可以去到他的主页上了。你需要的信息只有这个（在这个例子中是`kinokonomi`）：
 
-![](/home/chan/Documents/Code/Python/Simple-Booth-Notifier/md_assets/Screenshot_20220404_230346.png)
+![](./md_assets/Screenshot_20220404_230346.png)
 
 这是浏览器上方导航栏中显示的地址。在下方[添加关注列表](#addSubscription)的时候，我们只需要这个url中`https://`及`.booth.pm`中间的那部分。
 
 ## 运行时截图
 
-![](/home/chan/Documents/Code/Python/Simple-Booth-Notifier/md_assets/Screenshot_20220404_223103.png)
+![](./md_assets/Screenshot_20220404_223103.png)
 
 ## 程序拓展相关
 
