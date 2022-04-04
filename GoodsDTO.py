@@ -19,7 +19,7 @@ class GoodsDTO:
         `soldOut`: `bool`, whether the goods is sold out.
     """
 
-    FAVORED_TYPE = "抱き枕カバー"
+    FAVORED_TYPE = ["抱き枕カバー", ]
 
     def __init__(self, *, name: str, url: str, type: str, soldOut: bool) -> None:
         self._name = name
@@ -66,11 +66,12 @@ class GoodsDTO:
             soldOutStr = StrFormat.cstr("Sold Out", style="BOLD", fcolor="RED")
             print(f"{self._url} ==> {self._name}, {self._type} ({soldOutStr})")
             return
-        nameColor = "CYAN" if self._type == self.FAVORED_TYPE else "BLACK"
-        urlColor = "YELLOW" if self._type == self.FAVORED_TYPE else "BLACK"
-        typeColor = "BLUE" if self._type == GoodsDTO.FAVORED_TYPE else "BLACK"
-        nameStyle = urlStyle = "BOLD" if self._type == GoodsDTO.FAVORED_TYPE else "DEFAULT"
-        typeStyle = "REVERSE" if self._type == GoodsDTO.FAVORED_TYPE else "DEFAULT"
+        isFavored = self._type in GoodsDTO.FAVORED_TYPE
+        nameColor = "CYAN" if isFavored else "BLACK"
+        urlColor = "YELLOW" if isFavored else "BLACK"
+        typeColor = "BLUE" if isFavored else "BLACK"
+        nameStyle = urlStyle = "BOLD" if isFavored else "DEFAULT"
+        typeStyle = "REVERSE" if isFavored else "DEFAULT"
         coloredName = StrFormat.cstr(self._name, style=nameStyle, fcolor=nameColor)
         coloredUrl = StrFormat.cstr(self._url, style=urlStyle, fcolor=urlColor)
         coloredType = StrFormat.cstr(self._type, style=typeStyle, fcolor=typeColor)
