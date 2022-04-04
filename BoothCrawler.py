@@ -33,7 +33,7 @@ class BoothCrawler:
         opener.addheaders = [("User-Agent", ua.random)]
         req.install_opener(opener)
 
-    def _getWebsiteInfo(self) -> tuple[list[str], list[str]]:
+    def _getWebsiteInfo(self) -> tuple[list[str], list[str], list[bool]]:
         """
             Reaches the target website to get the goods list.
         
@@ -41,7 +41,7 @@ class BoothCrawler:
 
         returns:
 
-        `list[str]`: the list of goods
+        `tuple[list[str], list[str], list[bool]]`: the goods list, the type of the goods, and the availability of the goods
         """
         userName = self._userInfo.name
         url = f"https://{userName}.booth.pm"
@@ -50,9 +50,15 @@ class BoothCrawler:
             .read() \
             .decode("utf-8")
         reqHtml = etree.HTML(reqStr)
-        return reqHtml.xpath(self.PRODUCT_XPATH), reqHtml.xpath(self.PRODUCT_TYPE_XPATH)
+        products = reqHtml.xpath(self.PRODUCT_XPATH)
+        types = reqHtml.xpath(self.PRODUCT_TYPE_XPATH)
+        isSoldOut: list[bool] = []
+        for i, _ in enumerate(products):
+            soldOut = reqHtml.xpath(f"//shop-item-component[{i+1}]//div[@class=\"badge empty-stock\"]/text()")
+            isSoldOut.append(True if soldOut else False)
+        return products, types, isSoldOut
     
-    def _updateGoods(self) -> list[tuple[str, str]]:
+    def _updateGoods(self) -> list[tuple[str, str, bool]]:
         """
             Updates the old goods' list with the new one.
         
@@ -60,14 +66,14 @@ class BoothCrawler:
 
         returns:
 
-        `list[str]`: Goods that differs new list from the old one
+        `list[tuple[str, str, bool]]`: the difference between the old and new goods' list
         """
         oldGoods = self._userInfo.goods
-        newGoods, goodTypes = self._getWebsiteInfo()
+        newGoods, goodTypes, isSoldOut = self._getWebsiteInfo()
         diffGoods: list[tuple[str, str]] = []
-        for newGood, goodType in zip(newGoods, goodTypes):
+        for newGood, goodType, soldOut in zip(newGoods, goodTypes, isSoldOut):
             if newGood not in oldGoods:
-                diffGoods.append((newGood, goodType))
+                diffGoods.append((newGood, goodType, soldOut))
         self._userInfo.goods = newGoods
         return diffGoods
     
@@ -77,7 +83,7 @@ class BoothCrawler:
         """
         self._userInfo.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    def updateUserInfo(self) -> dict[str, list[tuple[str, str]]] :
+    def updateUserInfo(self) -> dict[str, list[tuple[str, str, bool]]] :
         """
             Updates the user info with the new one.
 
@@ -85,7 +91,7 @@ class BoothCrawler:
 
             returns:
 
-            `dict[str, list[str]]`: the updated user info that gets into the notifier
+            `dict[str, list[tuple[str, str, bool]]]`: the difference between the old and new goods' list
         """
         diffGoods = self._updateGoods()
         self._updateTimestamp()
