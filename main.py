@@ -8,7 +8,7 @@ if __name__ == "__main__":
     boothNotifier = BoothNotifier()
     for i, userInfo in enumerate(syncHistory):
         boothcrawler = BoothCrawler(userInfo)
-        boothNotifier.notifyCrawlingStarter(userInfo.name)
+        boothNotifier.notifyCrawlingStarter(userInfo.userName)
         infoNotifier = boothcrawler.updateUserInfo()
         syncHistory[i] = boothcrawler.userInfo
         syncHistory.writeBack()

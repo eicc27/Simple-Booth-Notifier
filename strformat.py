@@ -38,6 +38,10 @@ class StrFormat:
             return f"\033[{style};{fcolor};{bcolor}m{s}\033[0m"
         else:
             return f"\033[{style};{fcolor}m{s}\033[0m"
+    
+    @staticmethod
+    def default(s: str):
+        return StrFormat.cstr(s, style="DEFAULT", fcolor="BLACK")
 
     @staticmethod
     def ok(s: str):

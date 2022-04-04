@@ -21,7 +21,10 @@ class SyncHistory:
         """
         Gets the history info from the target file.
         
-        The example format of history.json:
+        The example format of history.json are as below.
+
+        Examples
+        ------
     
         {
         "users": {
@@ -56,9 +59,9 @@ class SyncHistory:
         file = json.load(open(self._targetPath, "r", encoding="utf-8"))
         fileUsers = file["users"]
         for userInfo in self._users:
-            userName = userInfo.name
+            userName = userInfo.userName
             fileUsers[userName] = {
-                "goods": userInfo.goods,
+                "goods": userInfo.goodIDs,
                 "timestamp": userInfo.timestamp
             }
         json.dump(file, open(self._targetPath, "w", encoding="utf-8"), indent=4)
