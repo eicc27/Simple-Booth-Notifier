@@ -19,7 +19,7 @@ class GoodsDTO:
         `soldOut`: `bool`, whether the goods is sold out.
     """
 
-    FAVORED_TYPE = ["抱き枕カバー", ]
+    FAVORED_TYPES = ["抱き枕カバー", ]
 
     def __init__(self, *, name: str, url: str, type: str, soldOut: bool) -> None:
         self._name = name
@@ -66,7 +66,7 @@ class GoodsDTO:
             soldOutStr = StrFormat.cstr("Sold Out", style="BOLD", fcolor="RED")
             print(f"{self._url} ==> {self._name}, {self._type} ({soldOutStr})")
             return
-        isFavored = self._type in GoodsDTO.FAVORED_TYPE
+        isFavored = self._type in GoodsDTO.FAVORED_TYPES
         nameColor = "CYAN" if isFavored else "BLACK"
         urlColor = "YELLOW" if isFavored else "BLACK"
         typeColor = "BLUE" if isFavored else "BLACK"
